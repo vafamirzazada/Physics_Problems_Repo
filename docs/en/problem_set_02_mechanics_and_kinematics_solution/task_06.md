@@ -69,6 +69,25 @@ $$\vec r'(t) = (-R\sin(\omega t), -R\cos(\omega t))$$
 The cycloid is therefore mathematically and physically just the superposition (vector sum) of uniform linear translation and uniform circular motion. 
 
 > **Note:** HTML animation required (Phase 2).
+> **Requirements:** A visual showing the rolling circle, the point drawing the cycloid curve, and the dynamic vectors $\vec v$ and $\vec a$ scaling and rotating as the point moves.  This happens at the very top of the circle's path ($y = 2R$).
+* **Maximum Acceleration:**
+  $$|\vec a(t)| = \sqrt{(R\omega^2\sin(\omega t))^2 + (R\omega^2\cos(\omega t))^2} = \sqrt{R^2\omega^4(\sin^2(\omega t) + \cos^2(\omega t))} = \mathbf{R\omega^2}$$
+  The magnitude of acceleration is strictly **constant**! Thus, its maximum value is simply $R\omega^2$.
+
+---
+
+## 4. Interpretation of Results
+The most striking result is that a point on a rolling wheel does not move at a constant speed. When it touches the ground, its instantaneous velocity is exactly zero (this is what "rolling without slipping" means). When it is at the very top of the wheel, it moves at $2R\omega$, which is twice the speed of the center of the car/wheel!
+
+---
+
+## 5. Conceptual Explanation and Frame of Reference
+If we change our reference frame to move with the center of the wheel (which moves horizontally at constant velocity $\vec V_c = (R\omega, 0)$), the horizontal motion of the center is subtracted. 
+In this moving frame, the point simply undergoes uniform circular motion:
+$$\vec r'(t) = (-R\sin(\omega t), -R\cos(\omega t))$$
+The cycloid is therefore mathematically and physically just the superposition (vector sum) of uniform linear translation and uniform circular motion. 
+
+> **Note:** HTML animation required (Phase 2).
 > **Requirements:** A visual showing the rolling circle, the point drawing the cycloid curve, and the dynamic vectors $\vec v$ and $\vec a$ scaling and rotating as the point moves.
 ### 3. Maximum Values
 * **Maximum Speed:** $|\vec v|_{max}$ occurs when $\left|\sin\left(\frac{\omega t}{2}\right)\right| = 1$.
