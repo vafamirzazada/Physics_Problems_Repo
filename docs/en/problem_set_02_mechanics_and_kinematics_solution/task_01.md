@@ -8,10 +8,12 @@ $$x(t) = x_0 + v_0t + \frac{1}{2}at^2$$
 
 We need to:
 1. Determine the velocity $v(t)$ and acceleration $a(t)$.
+
 2. For the parameters $x_0 = 0, v_0 = 5 \text{ m/s}, a = -2 \text{ m/s}^2$:
     * Calculate the stopping time.
     * Determine the maximum velocity.
     * Calculate the maximum displacement.
+
 3. Prepare for a future visualization of $x(t), v(t), a(t)$.
 
 ---
