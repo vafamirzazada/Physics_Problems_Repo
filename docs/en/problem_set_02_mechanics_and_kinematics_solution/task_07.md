@@ -1,115 +1,113 @@
-# Task 02: Projectile Motion
+# Task 07: 2D Motion with a Given Acceleration
 
 ---
 
 ## 1. Problem Restatement
-Analyze a body moving in a uniform gravitational field without air resistance.
-Given: Initial velocity $v_0$ and launch angle $\alpha$ relative to the horizontal.
+We are given a constant 2D acceleration vector and the starting conditions (initial velocity and position).
 
-We must:
-* Derive equations for horizontal ($x$) and vertical ($y$) motion.
-* Determine the total time of flight.
-* Determine the maximum height reached.
-* Determine the total horizontal range.
-* Find the optimal angle for maximum range.
-* Note requirements for a future trajectory animation.
+**Given:**
+* Acceleration: $\vec a = (2, -3)$
+* Initial velocity: $\vec v(0) = (1, 0)$
+* Initial position: $\vec r(0) = (0, 0)$
+
+**We need to:**
+1. Determine the velocity function $\vec v(t)$ over time.
+2. Determine the position function $\vec r(t)$ over time.
+3. Note the requirements for drawing the trajectory and vectors (HTML animation).
 
 ---
 
 ## 2. Physical Model and Assumptions
-* **Model:** 2D Kinematics (Projectile Motion).
-* **Assumptions:** * Gravity is constant ($g \approx 9.81 \text{ m/s}^2$) and pulls straight down (negative $y$-direction).
-    * There is no air resistance (vacuum conditions).
-    * The starting point is the origin $(0,0)$.
+* **Model:** 2D Kinematics with constant acceleration. 
+* **Assumptions:** * The object is a point mass.
+    * The acceleration does not change with time.
+    * The motion starts at time $t = 0$ at the origin.
 
 ---
 
 ## 3. Mathematical Derivation
 
-### Step 1: Decomposition of Initial Velocity
-The initial velocity vector must be split into horizontal ($x$) and vertical ($y$) pieces using trigonometry:
+Since acceleration is the derivative of velocity, we find velocity by **integrating** the acceleration. Since velocity is the derivative of position, we find position by **integrating** the velocity.
 
-$$v_{0x} = v_0 \cos \alpha$$
+We will do this separately for the $x$ and $y$ directions.
 
-$$v_{0y} = v_0 \sin \alpha$$
+### Step 1: Determine Velocity $\vec v(t)$
 
-### Step 2: Equations of Motion
-Since there is no air resistance, horizontal acceleration is zero ($a_x = 0$). Vertical acceleration is just gravity ($a_y = -g$).
+**For the X-direction:**
+Integrate the $x$-acceleration ($a_x = 2$):
 
-**Horizontal position:**
-$$x(t) = v_{0x} t$$
-$$x(t) = (v_0 \cos \alpha) t$$
+$$v_x(t) = \int 2 \, dt$$
 
-**Vertical position:**
-$$y(t) = v_{0y} t + \frac{1}{2} a_y t^2$$
-$$y(t) = (v_0 \sin \alpha) t - \frac{1}{2} g t^2$$
+$$v_x(t) = 2t + C_x$$
 
-### Step 3: Time of Flight ($t_f$)
-The object hits the ground when its vertical position is zero again ($y = 0$). 
+Use the initial condition $v_x(0) = 1$ to find $C_x$:
 
-Set the vertical equation to zero:
-$$(v_0 \sin \alpha) t - \frac{1}{2} g t^2 = 0$$
+$$1 = 2(0) + C_x \implies C_x = 1$$
 
-Factor out $t$:
-$$t \left( v_0 \sin \alpha - \frac{1}{2} g t \right) = 0$$
+$$v_x(t) = 2t + 1$$
 
-This gives two solutions. The first is $t = 0$ (the launch). We want the second solution (the landing):
-$$v_0 \sin \alpha - \frac{1}{2} g t_f = 0$$
+**For the Y-direction:**
+Integrate the $y$-acceleration ($a_y = -3$):
 
-Move the gravity term to the other side:
-$$\frac{1}{2} g t_f = v_0 \sin \alpha$$
+$$v_y(t) = \int -3 \, dt$$
 
-Multiply by 2 and divide by $g$:
-**$$t_f = \frac{2 v_0 \sin \alpha}{g}$$**
+$$v_y(t) = -3t + C_y$$
 
-### Step 4: Maximum Height ($H$)
-The object reaches its highest point exactly halfway through its flight. So, the time to reach the top is half of $t_f$:
-$$t_{top} = \frac{v_0 \sin \alpha}{g}$$
+Use the initial condition $v_y(0) = 0$ to find $C_y$:
 
-Plug this time into the vertical position equation $y(t)$:
-$$H = (v_0 \sin \alpha) \left( \frac{v_0 \sin \alpha}{g} \right) - \frac{1}{2} g \left( \frac{v_0 \sin \alpha}{g} \right)^2$$
+$$0 = -3(0) + C_y \implies C_y = 0$$
 
-Multiply the terms out:
-$$H = \frac{v_0^2 \sin^2 \alpha}{g} - \frac{1}{2} g \left( \frac{v_0^2 \sin^2 \alpha}{g^2} \right)$$
+$$v_y(t) = -3t$$
 
-Cancel one $g$ in the second term:
-$$H = \frac{v_0^2 \sin^2 \alpha}{g} - \frac{v_0^2 \sin^2 \alpha}{2g}$$
+**Final Velocity Vector:**
+Combine the $x$ and $y$ components:
 
-Subtract half from a whole:
-**$$H = \frac{v_0^2 \sin^2 \alpha}{2g}$$**
+$$\vec v(t) = (2t + 1, \, -3t)$$
 
-### Step 5: Range ($R$)
-The range is the horizontal distance traveled by the time the object hits the ground ($t = t_f$).
+---
 
-Plug $t_f$ into the horizontal position equation $x(t)$:
-$$R = (v_0 \cos \alpha) \left( \frac{2 v_0 \sin \alpha}{g} \right)$$
+### Step 2: Determine Position $\vec r(t)$
 
-Rearrange the variables to group the trig functions:
-$$R = \frac{v_0^2 (2 \sin \alpha \cos \alpha)}{g}$$
+**For the X-direction:**
+Integrate the $x$-velocity ($v_x(t) = 2t + 1$):
 
-Use the trigonometric identity $\sin(2\alpha) = 2 \sin \alpha \cos \alpha$:
-**$$R = \frac{v_0^2 \sin(2\alpha)}{g}$$**
+$$x(t) = \int (2t + 1) \, dt$$
 
-### Step 6: Maximum Range Angle
-To get the biggest possible range, the sine function in our range formula must be as large as possible. The maximum value of sine is 1.
+$$x(t) = t^2 + t + C_{rx}$$
 
-$$\sin(2\alpha) = 1$$
+Use the initial position $x(0) = 0$ to find $C_{rx}$:
 
-The angle that gives a sine of 1 is $90^\circ$:
-$$2\alpha = 90^\circ$$
+$$0 = 0^2 + 0 + C_{rx} \implies C_{rx} = 0$$
 
-Divide by 2:
-**$$\alpha = 45^\circ$$**
+$$x(t) = t^2 + t$$
+
+**For the Y-direction:**
+Integrate the $y$-velocity ($v_y(t) = -3t$):
+
+$$y(t) = \int -3t \, dt$$
+
+$$y(t) = -\frac{3}{2}t^2 + C_{ry}$$
+
+Use the initial position $y(0) = 0$ to find $C_{ry}$:
+
+$$0 = -\frac{3}{2}(0)^2 + C_{ry} \implies C_{ry} = 0$$
+
+$$y(t) = -1.5t^2$$
+
+**Final Position Vector:**
+Combine the $x$ and $y$ components:
+
+$$\vec r(t) = (t^2 + t, \, -1.5t^2)$$
 
 ---
 
 ## 4. Interpretation of Results
-The math proves that the horizontal and vertical motions don't affect each other. The time the object spends in the air is determined *entirely* by its vertical speed and gravity. However, how far it travels (the range) depends on finding the perfect balance: a high angle keeps it in the air longer, but a low angle gives it more forward speed. The math shows that exactly $45^\circ$ is the perfect compromise in a vacuum.
+The $x$-component of the position increases very quickly because it has both an initial velocity and a positive acceleration. The $y$-component drops downwards (negative) increasingly fast due to the negative acceleration. The resulting path will look like a sideways, downward-curving parabola.
 
 ---
 
 ## 5. Conceptual Explanation
-Imagine separating the motion into two shadows: one moving along the ground, and one moving straight up a wall. The shadow on the ground moves at a perfectly steady, constant speed. The shadow on the wall acts exactly like a ball thrown straight up—it slows down, stops at the peak, and falls back down. Projectile motion is just these two simple shadows happening at the same time.
+This problem demonstrates the core principle of classical mechanics: if you know where an object starts, how fast it is moving initially, and the forces acting on it (which give it constant acceleration), you can perfectly predict its entire future path by simply integrating step-by-step. 
 
-> **Note:** HTML visualization required (Phase 2). 
-> **Interactive Features:** Sliders for initial velocity $v_0$ and angle $\alpha$ to observe real-time changes in the parabolic trajectory, highlighting the $45^\circ$ maximum range.
+> **Note:** HTML animation required (Phase 2).
+> **Requirements:** Draw the parabolic trajectory curve. Add visual arrows for $\vec v(t)$ (always tangent to the curve) and $\vec a(t)$ (always pointing in the constant $(2, -3)$ direction) that update as the point moves along the path.
