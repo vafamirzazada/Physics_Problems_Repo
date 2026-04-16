@@ -1,28 +1,61 @@
 # Problem 6: The Damped Harmonic Oscillator
 
-In real-world physics, oscillators don't bounce forever. They lose energy to their surroundings. We model this using the **Damped Harmonic Oscillator** equation.
+In real-world physical systems, oscillations do not continue indefinitely because energy is dissipated by resistive forces such as friction or air resistance. We model this behavior using the **Damped Harmonic Oscillator**.
+
+---
 
 ### 1. The Equation of Motion
-The system is governed by a second-order linear ordinary differential equation:
+The system is governed by a second-order linear ordinary differential equation based on Newton's Second Law:
+
 $$m\frac{d^{2}x}{dt^{2}} + b\frac{dx}{dt} + kx = 0$$
 
-* **$m\frac{d^{2}x}{dt^{2}}$ (Inertia):** The mass resisting acceleration.
-* **$b\frac{dx}{dt}$ (Damping Force):** The friction or "drag" proportional to velocity.
-* **$kx$ (Restoring Force):** The spring pulling the mass back to equilibrium.
+**Where each term represents a specific physical force:**
 
-### 2. Classification of Damping Cases
-The behavior of the system depends on the **damping ratio**. We define the characteristic equation and look at the discriminant $\Delta = b^2 - 4mk$.
+* **$m\frac{d^{2}x}{dt^{2}}$ (Inertia):** The force required to accelerate the mass $m$.
+* **$b\frac{dx}{dt}$ (Damping Force):** A resistive force that is directly proportional to the velocity ($v = \frac{dx}{dt}$), where $b$ is the damping coefficient.
+* **$kx$ (Restoring Force):** The linear force of the spring pulling the mass back toward the equilibrium position $x=0$.
 
-* **Underdamped ($b^2 < 4mk$):** The system oscillates, but the amplitude decays exponentially over time. This is like a bell ringing that slowly fades.
-* **Critically Damped ($b^2 = 4mk$):** The system returns to equilibrium as quickly as possible without any oscillation. This is the ideal setting for car shock absorbers or high-end door closers.
-* **Overdamped ($b^2 > 4mk$):** The damping is so strong (like moving through thick honey) that the system slowly crawls back to equilibrium without ever crossing it.
+---
+
+### 2. General Solutions and Classification of Cases
+To solve the equation, we assume a solution of the form $x(t) = e^{rt}$. Substituting this into the differential equation yields the characteristic equation:
+
+$$mr^2 + br + k = 0$$
+
+The roots are determined by the quadratic formula: $r = \frac{-b \pm \sqrt{b^2 - 4mk}}{2m}$. The behavior of the system is classified based on the discriminant $\Delta = b^2 - 4mk$:
+
+#### **Case I: Underdamped ($b^2 < 4mk$)**
+The discriminant is negative, resulting in complex roots. The solution is an oscillation with an exponentially decaying amplitude:
+
+$$x(t) = A e^{-\gamma t} \cos(\omega_d t + \varphi)$$
+
+Where $\gamma = \frac{b}{2m}$ is the decay constant and $\omega_d = \sqrt{\frac{k}{m} - \frac{b^2}{4m^2}}$ is the damped angular frequency.
+
+#### **Case II: Critically Damped ($b^2 = 4mk$)**
+The discriminant is zero, leading to a repeated real root. This represents the threshold where the system returns to equilibrium as fast as possible without oscillating:
+
+$$x(t) = (A + Bt) e^{-\gamma t}$$
+
+#### **Case III: Overdamped ($b^2 > 4mk$)**
+The discriminant is positive, resulting in two distinct real roots. The damping is so strong that the system crawls back to equilibrium without ever crossing it:
+
+$$x(t) = A e^{r_1 t} + B e^{r_2 t}$$
+
+---
 
 ### 3. Numerical Strategy: Runge-Kutta (RK4)
-To solve this numerically, we break the second-order ODE into a system of two first-order ODEs:
-1. $\frac{dx}{dt} = v$
-2. $\frac{dv}{dt} = \frac{-bv - kx}{m}$
+While analytical solutions are exact, we solve the equation numerically to allow for interactive investigation of the parameter $b$. We convert the second-order ODE into a system of two first-order ODEs:
 
-We then apply the **RK4 method**, which provides much higher precision than the basic Euler method by taking four "weighted samples" of the slope for every time step.
+$$\frac{dx}{dt} = v$$
 
-### 4. Visualizing the Phase Portrait
-By plotting **Velocity ($v$) vs. Position ($x$)**, we can see the "energy spiral." In a damped system, the trajectory spirals inward toward the origin $(0,0)$, representing the loss of total mechanical energy.
+$$\frac{dv}{dt} = \frac{-bv - kx}{m}$$
+
+We apply the **4th Order Runge-Kutta (RK4) method**, which calculates four "slopes" ($k_1$ through $k_4$) at different points within the time step $\Delta t$ and takes a weighted average to update the state. This provides superior accuracy and numerical stability compared to simpler methods like Euler.
+
+---
+
+### 4. Interpretation of Results
+
+* **Effect of Parameter $b$:** Increasing the damping coefficient $b$ reduces the number of oscillations until the system reaches the critically damped threshold.
+* **Graph of $x(t)$:** In the underdamped case, the graph shows a sinusoidal wave trapped inside an exponentially decaying "envelope."
+* **Phase Portrait:** By plotting Velocity ($v$) against Position ($x$), we visualize the energy loss. In a perfect oscillator, this would be a closed loop; however, in a damped system, the trajectory is an inward spiral ending at the origin $(0,0)$, representing total energy dissipation.
