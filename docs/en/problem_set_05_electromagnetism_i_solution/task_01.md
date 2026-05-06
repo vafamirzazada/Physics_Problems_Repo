@@ -1,65 +1,70 @@
-# Problem 10: Electric Field Flux and Verification of Gauss's Law
+# Problem 1: Electrostatic Potential and Energy
 
-In this task, we transition from circuit dynamics to the fundamental principles of electromagnetism. We investigate the concept of electric flux and perform a numerical verification of Gauss's Law by calculating the flux of a point charge through a surrounding spherical surface.
-
----
-
-### 1. Definition of Electric Field Flux
-
-Electric flux ($\Phi_E$) is a measure of the "flow" of the electric field through a given surface. Mathematically, for a surface $S$, it is defined as the surface integral of the electric field $\mathbf{E}$ over that surface:
-
-$$\Phi_E = \iint_S \mathbf{E} \cdot d\mathbf{A}$$
-
-* **$\mathbf{E}$:** The electric field vector.
-* **$d\mathbf{A}$:** The vector area element, pointing normal (perpendicular) to the surface.
-* **Physical Analogy:** Much like water flowing through a pipe, the flux represents the total number of electric field lines passing through the "door" of our chosen surface.
+This task investigates the fundamental relationship between a point charge, the potential it creates in space, and the work required to manipulate a test charge within that field. We also derive the electric field intensity using calculus and verify the results against Coulomb’s Law.
 
 ---
 
-### 2. Theoretical Case: Sphere Around a Point Charge
+### 1. Calculation of Electric Potential ($V$)
 
-According to **Coulomb's Law**, the electric field $\mathbf{E}$ created by a point charge $q$ at a distance $r$ is:
+The electric potential at a distance $r$ from a point charge $q$ is defined as the potential energy per unit charge. Using the vacuum permittivity $k \approx 8.99 \times 10^9 \, \text{N}\cdot\text{m}^2/\text{C}^2$:
 
-$$\mathbf{E} = \frac{1}{4\pi\varepsilon_0} \frac{q}{r^2} \mathbf{\hat{r}}$$
+$$V(r) = \frac{k q}{r}$$
 
-When we place this charge at the center of a sphere of radius $R$, the electric field is always parallel to the area vector $d\mathbf{A}$ (since both point radially outward). Thus, the dot product $\mathbf{E} \cdot d\mathbf{A}$ simplifies to $E \cdot dA$.
+**Given:** $q = 4 \, \mu\text{C} = 4 \times 10^{-6} \, \text{C}$ and $r = 0.3 \, \text{m}$
 
-By **Gauss's Law**, the total flux through any closed surface is simply:
-
-$$\Phi_{total} = \frac{q_{enclosed}}{\varepsilon_0}$$
+$$V(0.3) = \frac{8.99 \times 10^9 \cdot 4 \times 10^{-6}}{0.3} \approx 119,866.67 \, \text{V}$$
 
 ---
 
-### 3. Numerical Strategy: Discrete Approximation
+### 2. Potential Difference ($\Delta V$)
 
-To verify this numerically, we cannot perform an infinite integral. Instead, we divide the sphere's surface into $N$ discrete patches. The total flux is approximated by the sum:
+The potential difference between two points represents the change in potential energy per unit charge as one moves between those points.
 
-$$\Phi_E \approx \sum_{i=1}^{N} \mathbf{E}_i \cdot \Delta\mathbf{A}_i$$
+**Points:** $r_1 = 0.3 \, \text{m}$ and $r_2 = 0.6 \, \text{m}$
 
-We use spherical coordinates $(\theta, \phi)$ to generate grid points on the sphere:
-* $\theta \in [0, \pi]$ (latitude)
-* $\phi \in [0, 2\pi]$ (longitude)
+$$\Delta V = V(r_2) - V(r_1) = k q \left( \frac{1}{r_2} - \frac{1}{r_1} \right)$$
 
-The area element for each patch is calculated as:
-$$\Delta A = R^2 \sin(\theta) \Delta\theta \Delta\phi$$
+$$V(0.6) = \frac{8.99 \times 10^9 \cdot 4 \times 10^{-6}}{0.6} \approx 59,933.33 \, \text{V}$$
 
----
+$$\Delta V = 59,933.33 - 119,866.67 = -59,933.34 \, \text{V}$$
 
-### 4. Implementation and Convergence Analysis
-
-A critical part of this task is investigating the **dependence on the number of grid points ($N$)**. 
-
-* **Numerical Error:** With a low number of points, the "curved" sphere is represented by flat tiles, leading to an approximation error.
-* **Convergence:** As $N$ increases, the discrete sum approaches the analytical value of $q/\varepsilon_0$. 
-* **Observation:** This numerical verification proves that our algorithmic approach to field theory is robust and matches the high-level calculus derived by Gauss.
+*Interpretation:* The negative result indicates that the potential decreases as we move away from a positive source charge.
 
 ---
 
-### 5. Comparison: Analytical vs. Numerical Result
+### 3. Work Done ($W$) on a Test Charge
 
-| Feature | Analytical (Gauss's Law) | Numerical (Discrete Sum) |
-| :--- | :--- | :--- |
-| **Formula** | $\Phi = q/\varepsilon_0$ | $\Phi = \sum E \Delta A$ |
-| **Complexity** | Instant calculation | Computationally heavy as $N \to \infty$ |
-| **Accuracy** | Exact | Approximates exactness with density |
-| **Flexibility** | Limited to symmetric shapes | Can calculate flux for any arbitrary geometry |
+The work required to move a test charge $q_0$ between two points in an electrostatic field is equal to the product of the charge and the potential difference:
+
+$$W = q_0 \cdot \Delta V$$
+
+**Given:** $q_0 = 2 \, \mu\text{C} = 2 \times 10^{-6} \, \text{C}$
+
+$$W = 2 \times 10^{-6} \cdot (-59,933.34) \approx -0.1199 \, \text{J}$$
+
+*Analogy:* Moving the charge away from a like-sign charge is like a ball rolling down a hill; the field does the work, which is why the value is negative (from the perspective of an external agent).
+
+---
+
+### 4. Electric Field Intensity ($E$) from Potential
+
+The electric field is the negative gradient (derivative) of the potential. In a radial system:
+
+$$E(r) = -\frac{dV}{dr}$$
+
+Differentiating $V(r) = \frac{k q}{r}$ with respect to $r$:
+
+$$E(r) = -\frac{d}{dr} \left( k q r^{-1} \right) = -(-1) k q r^{-2} = \frac{k q}{r^2}$$
+
+At $r = 0.3 \, \text{m}$:
+$$E(0.3) = \frac{8.99 \times 10^9 \cdot 4 \times 10^{-6}}{(0.3)^2} \approx 399,555.56 \, \text{N/C}$$
+
+---
+
+### 5. Comparison with Coulomb's Law
+
+Coulomb’s Law defines the force between two charges as $F = \frac{k q q_0}{r^2}$. Since $E$ is defined as force per unit charge ($E = F / q_0$), we have:
+
+$$E_{Coulomb} = \frac{1}{q_0} \left( \frac{k q q_0}{r^2} \right) = \frac{k q}{r^2}$$
+
+**Conclusion:** The derivative of the potential function yields the exact same formula as Coulomb's Law. This verification proves the mathematical consistency between the scalar field (Potential) and the vector field (Intensity).
