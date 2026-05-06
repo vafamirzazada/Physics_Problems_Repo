@@ -1,65 +1,74 @@
-# Problem 10: Electric Field Flux and Verification of Gauss's Law
+# Problem 9: Electric Dipole in a Uniform External Field
 
-In this task, we transition from circuit dynamics to the fundamental principles of electromagnetism. We investigate the concept of electric flux and perform a numerical verification of Gauss's Law by calculating the flux of a point charge through a surrounding spherical surface.
-
----
-
-### 1. Definition of Electric Field Flux
-
-Electric flux ($\Phi_E$) is a measure of the "flow" of the electric field through a given surface. Mathematically, for a surface $S$, it is defined as the surface integral of the electric field $\mathbf{E}$ over that surface:
-
-$$\Phi_E = \iint_S \mathbf{E} \cdot d\mathbf{A}$$
-
-* **$\mathbf{E}$:** The electric field vector.
-* **$d\mathbf{A}$:** The vector area element, pointing normal (perpendicular) to the surface.
-* **Physical Analogy:** Much like water flowing through a pipe, the flux represents the total number of electric field lines passing through the "door" of our chosen surface.
+This task examines the behavior of an electric dipole placed within a uniform external electric field $\mathbf{E_0}$. We derive its dynamics, energy states, and demonstrate how it acts as a harmonic oscillator under specific conditions.
 
 ---
 
-### 2. Theoretical Case: Sphere Around a Point Charge
+### 1. Derivation of Torque acting on the Dipole
 
-According to **Coulomb's Law**, the electric field $\mathbf{E}$ created by a point charge $q$ at a distance $r$ is:
+An electric dipole consists of two equal and opposite charges, $+q$ and $-q$, separated by a distance $d$. The dipole moment is defined as $\mathbf{p} = q\mathbf{d}$. 
 
-$$\mathbf{E} = \frac{1}{4\pi\varepsilon_0} \frac{q}{r^2} \mathbf{\hat{r}}$$
+When placed in a uniform field $\mathbf{E_0}$, the force on the positive charge is $\mathbf{F_+} = q\mathbf{E_0}$ and on the negative charge is $\mathbf{F_-} = -q\mathbf{E_0}$. While the net force is zero, these forces create a **torque** ($\boldsymbol{\tau}$) that attempts to align the dipole with the field:
 
-When we place this charge at the center of a sphere of radius $R$, the electric field is always parallel to the area vector $d\mathbf{A}$ (since both point radially outward). Thus, the dot product $\mathbf{E} \cdot d\mathbf{A}$ simplifies to $E \cdot dA$.
+$$\boldsymbol{\tau} = \mathbf{r_+} \times \mathbf{F_+} + \mathbf{r_-} \times \mathbf{F_-}$$
 
-By **Gauss's Law**, the total flux through any closed surface is simply:
+$$\boldsymbol{\tau} = \mathbf{p} \times \mathbf{E_0}$$
 
-$$\Phi_{total} = \frac{q_{enclosed}}{\varepsilon_0}$$
+The magnitude of this torque is:
+$$\tau = p E_0 \sin(\theta)$$
 
----
-
-### 3. Numerical Strategy: Discrete Approximation
-
-To verify this numerically, we cannot perform an infinite integral. Instead, we divide the sphere's surface into $N$ discrete patches. The total flux is approximated by the sum:
-
-$$\Phi_E \approx \sum_{i=1}^{N} \mathbf{E}_i \cdot \Delta\mathbf{A}_i$$
-
-We use spherical coordinates $(\theta, \phi)$ to generate grid points on the sphere:
-* $\theta \in [0, \pi]$ (latitude)
-* $\phi \in [0, 2\pi]$ (longitude)
-
-The area element for each patch is calculated as:
-$$\Delta A = R^2 \sin(\theta) \Delta\theta \Delta\phi$$
+Where $\theta$ is the angle between the dipole moment $\mathbf{p}$ and the electric field $\mathbf{E_0}$.
 
 ---
 
-### 4. Implementation and Convergence Analysis
+### 2. Potential Energy of the Dipole
 
-A critical part of this task is investigating the **dependence on the number of grid points ($N$)**. 
+The work done by the external field to rotate the dipole is stored as electrostatic potential energy ($U$). We calculate this by integrating the torque over the angle of rotation:
 
-* **Numerical Error:** With a low number of points, the "curved" sphere is represented by flat tiles, leading to an approximation error.
-* **Convergence:** As $N$ increases, the discrete sum approaches the analytical value of $q/\varepsilon_0$. 
-* **Observation:** This numerical verification proves that our algorithmic approach to field theory is robust and matches the high-level calculus derived by Gauss.
+$$U = \int \tau \, d\theta = \int p E_0 \sin(\theta) \, d\theta$$
+
+$$U = -p E_0 \cos(\theta)$$
+
+In vector notation, this is expressed as the dot product:
+$$U = -\mathbf{p} \cdot \mathbf{E_0}$$
+
+* **Stable Equilibrium:** $U = -pE_0$ (when $\theta = 0^\circ$, aligned with the field).
+* **Unstable Equilibrium:** $U = +pE_0$ (when $\theta = 180^\circ$, anti-aligned).
 
 ---
 
-### 5. Comparison: Analytical vs. Numerical Result
+### 3. Equation of Angular Motion
 
-| Feature | Analytical (Gauss's Law) | Numerical (Discrete Sum) |
-| :--- | :--- | :--- |
-| **Formula** | $\Phi = q/\varepsilon_0$ | $\Phi = \sum E \Delta A$ |
-| **Complexity** | Instant calculation | Computationally heavy as $N \to \infty$ |
-| **Accuracy** | Exact | Approximates exactness with density |
-| **Flexibility** | Limited to symmetric shapes | Can calculate flux for any arbitrary geometry |
+According to Newton's Second Law for rotation, the torque is equal to the product of the moment of inertia ($I$) and the angular acceleration ($\alpha$):
+
+$$\tau = I \alpha = I \frac{d^2\theta}{dt^2}$$
+
+The restoring torque acts to decrease the angle $\theta$, so we introduce a negative sign:
+$$I \frac{d^2\theta}{dt^2} = -p E_0 \sin(\theta)$$
+
+This is a non-linear second-order differential equation.
+
+---
+
+### 4. Linearization for Small Displacements
+
+For very small angles ($\theta \approx 0$), we can use the **Small Angle Approximation**:
+$$\sin(\theta) \approx \theta$$
+
+Substituting this into our equation of motion gives us the linearized form:
+$$I \frac{d^2\theta}{dt^2} + (p E_0) \theta = 0$$
+
+$$\frac{d^2\theta}{dt^2} + \left( \frac{p E_0}{I} \right) \theta = 0$$
+
+---
+
+### 5. Interpretation as a Harmonic Oscillator
+
+The linearized equation above is mathematically identical to the equation for a **Simple Harmonic Oscillator** ($\ddot{x} + \omega^2 x = 0$). 
+
+By comparing the terms, we can identify the natural angular frequency ($\omega_0$) of the dipole's vibration:
+
+$$\omega_0 = \sqrt{\frac{p E_0}{I}}$$
+
+**Physical Conclusion:**
+If a dipole is slightly nudged from its alignment with an external field, it will not simply return to its original position. Instead, it will oscillate back and forth around the field lines. This demonstrates that the alignment of a dipole is not just a static state, but a dynamic equilibrium governed by oscillatory physics.
